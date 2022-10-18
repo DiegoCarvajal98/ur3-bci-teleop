@@ -1,13 +1,17 @@
 %% Clasificación de señales
 
+% Get the  input data about the subject, session and trial that is going to
+% be visualized
 if exist('first_run','var') == 0
     sess = eegtoolkit.util.Session;
     sess.loadAll(3); 
     first_run = 1;
 end
 
+% Load filter
 load filters/epocfilter;
 
+% Configure preprocessing methods
 ss = eegtoolkit.preprocessing.SampleSelection;
 ss.sampleRange = [64,640]; % Specify the sample range to be used for each Trial
 ss.channels = 6:9; % Specify the channel(s) to be used
@@ -15,13 +19,15 @@ ss.channels = 6:9; % Specify the channel(s) to be used
 df = eegtoolkit.preprocessing.DigitalFilter; % Apply a filter to the raw data
 df.filt = Hbp; % Hbp is a filter built with "filterbuilder" matlab function
 
+% Configure CCA extraction method
 sti_f = [12,10,8.57,7.5,6.66];
 extr = eegtoolkit.featextraction.CCA(sti_f,1:4,128,4);
 extr.allFeatures = 1;
 
-%Configure the classifier
+% Configure the classifier
 classif = eegtoolkit.classification.LIBSVM;
 
+% Get the input data about the subject "intention"
 fprintf("Selecciones uno de los objetos:\n" + ...
     "1. Cilindro\n" + ...
     "2. Esfera\n" + ...
@@ -35,6 +41,7 @@ label_3 = [];
 label_4 = [];
 label_5 = [];
 
+% Group the trials according to its labels
 for i = 1:1375
     tr = sess.trials{1,i}.label;
     if tr == 1
@@ -50,6 +57,8 @@ for i = 1:1375
     end
 end
 
+% Get one random trial from the dataset according to the subject
+% "intention" selected above
 if object == 1 || 2 || 4
     x = randi([1 275]);
 elseif object == 3
@@ -96,4 +105,5 @@ classif.instanceSet = extr.getInstances;
 
 % Load classification model
 load("model.mat");
-[outputLabels, outputScores, outputRanking] = experiment.classification.classifyInstance(classif.instanceSet)
+[outputLabels, outputScores, outputRanking] = experiment.classification.classifyInstance(classif.instanceSet);
+fprintf("Intención predicha: " + outputLabels + "\n")

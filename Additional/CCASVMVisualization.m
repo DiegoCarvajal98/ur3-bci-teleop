@@ -2,17 +2,21 @@
 % load the data again and again. Make sure the dataset is included in your
 % Matlab path
 
+% Check if it is the first time the programm is executed to load de dataset
 if exist('first_run','var') == 0
     sess = eegtoolkit.util.Session;
     sess.loadAll(3); 
     first_run = 1;
 end
 
+% Get the  input data about the subject, session and trial that is going to
+% be visualized
 disp("Gráfico de señal original")
 nSubject = input("Ingrese el número del sujeto (1-11):\n");
 nSession = input("Ingrese el número de la sesión (1-5):\n");
 nTrial = input("Ingrese el número de la prueba (1-25):\n");
 
+% Graph the raw signal
 trialGraph(sess,nSubject,nSession,nTrial);
 
 %Load a filter from the samples
@@ -31,10 +35,12 @@ refer = eegtoolkit.preprocessing.Rereferencing;
 %Subtract the mean from the signal
 refer.meanSignal = 1;
 
+% Sample selection preprocessing method
 ss = eegtoolkit.preprocessing.SampleSelection;
 ss.sampleRange = [64,640]; % Specify the sample range to be used for each Trial
 ss.channels = 6:9; % Specify the channel(s) to be used
 
+% Digital filter preprocessing method
 df = eegtoolkit.preprocessing.DigitalFilter; % Apply a filter to the raw data
 df.filt = Hbp; % Hbp is a filter built with "filterbuilder" matlab function
 
@@ -59,6 +65,7 @@ end
 
 accuracies'
 
+% Plot the accuracies for every subject
 figure(1)
 subplot(2,2,4)
 plot(1:11,accuracies)
@@ -66,6 +73,6 @@ title('Precisión del clasificador para cada sujetos')
 
 %mean accuracy for all subjects
 fprintf('mean acc = %f\n', mean(accuracies));
-%get the configuration used (for reporting)
+% get the configuration used (for reporting)
 % experiment.getExperimentInfo
 % experiment.getTime
