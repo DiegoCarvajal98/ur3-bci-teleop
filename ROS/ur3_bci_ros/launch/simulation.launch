@@ -1,0 +1,77 @@
+<launch>
+    <arg name="video_device" default="/dev/video2"/>
+    <arg name="image_width" default="640"/>
+    <arg name="image_height" default="480"/>
+    <arg name="robot_ip" default="172.16.125.53"/>
+    <arg name="kinematics_config" default="$(find ur3_teleoperation)/calibration/robot_calibration.yaml"/>
+    <arg name="gripper_comport" default="/dev/ttyUSB0"/>
+    <arg name="ur_robot" default="ur3"/>
+    <arg name="debug" default="false"/>
+
+    <!-- usb_cam node for UR3 operation space -->
+    <node pkg="usb_cam" type="usb_cam_node" name="robot_cam" output="log">
+        <param name="video_device" value="$(arg video_device)" />
+        <param name="image_width" value="$(arg image_width)" />
+        <param name="image_height" value="$(arg image_height)"/>
+        <param name="pixel_format" value="yuyv" />
+        <param name="camera_frame_id" value="robot_cam" />
+        <param name="io_method" value="mmap"/>
+    </node>
+
+    <!-- Collision objects for planning -->
+    <node pkg="ur3_teleoperation" type="collision_objects_node" name="collision_objects"/>
+
+    <!-- Robotiq 2F-85 Gripper control server node -->
+    <!--node pkg="robotiq_2f_gripper_control" type="robotiq_2f_action_server.py" name="robotiq_control_server" args="comport:=$(arg gripper_comport)"/-->
+
+    <!-- Camera calibrated transform -->
+    <include file="$(find ur3_bci_ros)/launch/calibrated_camera_pose.launch"/>
+
+    <!-- ArUco marker recognition node -->
+    <include file='$(find ur3_bci_ros)/launch/aruco_marker_finder.launch'>
+        <arg name="markerId" value="100"/>
+        <arg name="marker_frame" value="obj1_frame"/>
+        <arg name="ns" value="obj1"/>
+    </include>
+    <include file='$(find ur3_bci_ros)/launch/aruco_marker_finder.launch'>
+        <arg name="markerId" value="110"/>
+        <arg name="marker_frame" value="obj2_frame"/>
+        <arg name="ns" value="obj2"/>
+    </include>
+    <include file='$(find ur3_bci_ros)/launch/aruco_marker_finder.launch'>
+        <arg name="markerId" value="120"/>
+        <arg name="marker_frame" value="obj3_frame"/>
+        <arg name="ns" value="obj3"/>
+    </include>
+    <include file='$(find ur3_bci_ros)/launch/aruco_marker_finder.launch'>
+        <arg name="markerId" value="130"/>
+        <arg name="marker_frame" value="obj4_frame"/>
+        <arg name="ns" value="obj4"/>
+    </include>
+    <include file='$(find ur3_bci_ros)/launch/aruco_marker_finder.launch'>
+        <arg name="markerId" value="140"/>
+        <arg name="marker_frame" value="obj5_frame"/>
+        <arg name="ns" value="obj5"/>
+    </include>
+    
+    <!-- Simulated robot move group node -->
+    <include file="$(find ur_gripper_85_moveit_config)/launch/move_group.launch">
+        <arg name="ur_robot" default="$(arg ur_robot)"/>
+        <arg name="allow_trajectory_execution" value="true"/>
+        <arg name="fake_execution" value="false"/>
+        <arg name="info" value="true"/>
+        <arg name="debug" value="$(arg debug)"/>
+    </include>
+    
+    <!-- Object tf broadcaster -->
+    <node pkg="ur3_bci_ros" type="aruco_tf_broadcast.py" name="aruco_tf_broadcast"/>
+
+    <!-- UR3 to initial position node -->
+    <node pkg="ur3_bci_ros" type="initial_position.py" name="ur3_initial_pose"/>
+
+    <!-- UR3 control with predicted stimulus node -->
+    <node pkg="ur3_bci_ros" type="bci_teleop.py" name="ur3_predicted_control"/>
+
+    <!-- UR3 move node -->
+    <node pkg="ur3_bci_ros" type="move_ur3.py" name="ur3_move"/>
+</launch>

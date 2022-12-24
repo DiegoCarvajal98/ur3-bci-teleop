@@ -1,0 +1,43 @@
+<launch>
+    <arg name="video_device" default="/dev/video2"/>
+    <arg name="image_width" default="640"/>
+    <arg name="image_height" default="480"/>
+    <arg name="robot_ip" default="172.16.125.53"/>
+    <arg name="kinematics_config" default="$(find ur3_teleoperation)/calibration/robot_calibration.yaml"/>
+    <arg name="gripper_comport" default="/dev/ttyUSB0"/>
+    <arg name="ur_robot" default="ur3"/>
+    <arg name="debug" default="false"/>
+
+    <!-- usb_cam node for UR3 operation space -->
+    <node pkg="usb_cam" type="usb_cam_node" name="robot_cam" output="log">
+        <param name="video_device" value="$(arg video_device)" />
+        <param name="image_width" value="$(arg image_width)" />
+        <param name="image_height" value="$(arg image_height)"/>
+        <param name="pixel_format" value="yuyv" />
+        <param name="camera_frame_id" value="robot_cam" />
+        <param name="io_method" value="mmap"/>
+    </node>
+
+    <!-- Camera calibrated transform -->
+    <include file="$(find ur3_bci_ros)/launch/calibrated_camera_pose.launch"/>
+
+    <!-- UR3 robot ROS Control node -->
+    <include file="$(find ur_robot_driver)/launch/ur3_bringup.launch">
+        <arg name="robot_ip" value="$(arg robot_ip)"/>
+        <arg name="kinematics_config" value="$(arg kinematics_config)"/>
+    </include>
+
+    <!-- Robotiq 2F-85 Gripper control server node -->
+    <include file="$(find robotiq_2f_gripper_control)/launch/robotiq_action_server.launch"/>
+
+    <!-- Robot move group node -->
+    <include file="$(find ur_gripper_85_moveit_config)/launch/move_group.launch">
+        <arg name="ur_robot" default="$(arg ur_robot)"/>
+        <arg name="allow_trajectory_execution" value="true"/>
+        <arg name="fake_execution" value="false"/>
+        <arg name="info" value="true"/>
+        <arg name="debug" value="$(arg debug)"/>
+    </include>
+
+    <node pkg="rviz" type="rviz" name="rviz"/>
+</launch>
