@@ -14,12 +14,12 @@ This project has been tested on a Ubuntu 18.04 machine with 16 GB Ram, Intel Cor
 
 ## ROS Packages
 The ROS packages used for this project are:
-* (aruco_ros)[https://github.com/pal-robotics/aruco_ros]
-* (moveit)[https://moveit.ros.org/install/]
-* (universal_robots_ros_driver)[https://github.com/UniversalRobots/Universal_Robots_ROS_Driver]
-* (usb_cam)[http://wiki.ros.org/usb_cam]
-* (moveit_calibration)[https://github.com/ros-planning/moveit_calibration]
-* (ur3)[https://github.com/cambel/ur3]
+* [aruco_ros](https://github.com/pal-robotics/aruco_ros)
+* [moveit](https://moveit.ros.org/install/)
+* [universal_robots_ros_driver](https://github.com/UniversalRobots/Universal_Robots_ROS_Driver)
+* [usb_cam](http://wiki.ros.org/usb_cam)
+* [moveit_calibration](https://github.com/ros-planning/moveit_calibration)
+* [ur3](https://github.com/cambel/ur3)
 
 # References
 [[1]](https://www.mamem.eu/) Mamem Project page
