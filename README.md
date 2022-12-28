@@ -13,7 +13,7 @@ To process the EEG data from the datasets, we're going to use the processing too
 This project has been tested on a Ubuntu 18.04 machine with 16 GB Ram, Intel Core i5-4210U processor and with [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) and Matlab 2021b installed.
 
 ## ROS Packages
-The ROS packages used for this project are:
+The ROS packages needed to run the code for this project are:
 * [aruco_ros](https://github.com/pal-robotics/aruco_ros)
 * [moveit](https://moveit.ros.org/install/)
 * [universal_robots_ros_driver](https://github.com/UniversalRobots/Universal_Robots_ROS_Driver)
