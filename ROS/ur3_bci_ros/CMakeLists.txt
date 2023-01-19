@@ -8,6 +8,8 @@ set(ROS_DEPENDS
     roscpp
     rospy
     std_msgs
+    moveit
+    usb_cam
     )
 
 set(EXTERNAL_DEPENDS
@@ -28,6 +30,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  moveit
+  usb_cam
 )
 
 ## System dependencies are found with CMake's conventions
@@ -122,7 +126,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ur3_bci_ros
-#  CATKIN_DEPENDS roscpp rospy std_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs moveit usb_cam
 #  DEPENDS system_lib
 )
 
@@ -152,6 +156,11 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ur3_bci_ros_node.cpp)
 
+add_executable(collision_objects_node
+  src/CollisionObjects.cpp
+  src/collision_objects_node.cpp
+)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -166,6 +175,10 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+
+target_link_libraries(collision_objects_node
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##

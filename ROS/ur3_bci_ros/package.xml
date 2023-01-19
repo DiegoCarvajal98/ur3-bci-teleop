@@ -60,6 +60,9 @@
   <exec_depend>std_msgs</exec_depend>
 
 
+  <depend>moveit</depend>
+  <depend>usb_cam</depend>
+
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     
