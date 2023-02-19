@@ -2,9 +2,9 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit_msgs/CollisionObject.h>
-#include <ur3_teleoperation/CollisionObjects.hpp>
+#include <ur3_bci_ros/CollisionObjects.hpp>
 
-namespace ur3_teleoperation{
+namespace ur3_bci_ros{
 
 CollisionObjects::CollisionObjects(ros::NodeHandle& nh, std::string planning_group) :
  nh_(nh){

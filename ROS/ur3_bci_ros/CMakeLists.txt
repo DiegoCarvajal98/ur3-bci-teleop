@@ -8,7 +8,6 @@ set(ROS_DEPENDS
     roscpp
     rospy
     std_msgs
-    moveit
     usb_cam
     )
 
@@ -30,9 +29,12 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  moveit
   usb_cam
+  moveit_msgs
+  moveit_ros_planning_interface
 )
+
+find_package(Eigen3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -126,7 +128,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ur3_bci_ros
-  CATKIN_DEPENDS roscpp rospy std_msgs moveit usb_cam
+  CATKIN_DEPENDS roscpp rospy std_msgs usb_cam moveit_msgs
 #  DEPENDS system_lib
 )
 
@@ -137,10 +139,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
+include_directories(SYSTEM
+  ${Boost_INCLUDE_DIR}
+  ${EIGEN3_INCLUDE_DIRS})
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/ur3_bci_ros.cpp

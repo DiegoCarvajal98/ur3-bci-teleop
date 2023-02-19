@@ -5,7 +5,7 @@
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit_msgs/CollisionObject.h>
 
-namespace ur3_teleoperation{
+namespace ur3_bci_ros{
 
 class CollisionObjects{
 public:
