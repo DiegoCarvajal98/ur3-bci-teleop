@@ -138,9 +138,17 @@ classdef Experimenter < handle
 
             figure(1)
             subplot(2,2,3);
-            scatter(1:20,instanceSet.instances(sTrial,:))                                                       % Plot Instances
+            bar(1:4,[instanceSet.instances(sTrial,1:4); ...
+                instanceSet.instances(sTrial,5:8); ...
+                instanceSet.instances(sTrial,9:12); ...
+                instanceSet.instances(sTrial,13:16); ...
+                instanceSet.instances(sTrial,17:20)])                                                       % Plot Instances
             title('Características extraidas')
-            xlim([0 21])
+            xlim([0 5])
+            xticklabels({'P8','O2','O1','P7'})
+            legend('12 Hz','10 Hz','8.57 Hz','7.5 Hz','6.66 Hz')
+            xlabel('Electrodos')
+            ylabel('Correlación')
             end
             % ------------------ Fin Gráfico ---------------------
 
@@ -429,4 +437,5 @@ classdef Experimenter < handle
     end
     
 end
+
 
