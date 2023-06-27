@@ -68,8 +68,10 @@ accuracies'
 % Plot the accuracies for every subject
 figure(1)
 subplot(2,2,4)
-plot(1:11,accuracies)
+bar(1:11,accuracies)
 title('Precisión del clasificador para cada sujetos')
+xlabel('Sujetos')
+ylabel('Precisión (%)')
 
 %mean accuracy for all subjects
 fprintf('mean acc = %f\n', mean(accuracies));
